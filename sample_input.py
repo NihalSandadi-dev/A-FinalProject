@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from helper_functions import calculate_euclidean_disatance
+from helper_functions import calculate_euclidean_distance
 
 
 """
@@ -35,14 +35,14 @@ node_coords = {
 # ]
 
 sample_graph = [
-    [(1, calculate_euclidean_disatance(node_coords[0], node_coords[1])), (2, calculate_euclidean_disatance(node_coords[0], node_coords[2])), (4, calculate_euclidean_disatance(node_coords[0], node_coords[4]))],
-    [(0, calculate_euclidean_disatance(node_coords[1], node_coords[0])), (2, calculate_euclidean_disatance(node_coords[1], node_coords[2]))],
-    [(0, calculate_euclidean_disatance(node_coords[2], node_coords[0])), (1, calculate_euclidean_disatance(node_coords[2], node_coords[1])), (3, calculate_euclidean_disatance(node_coords[2], node_coords[3]))],
-    [(2, calculate_euclidean_disatance(node_coords[3], node_coords[2])), (4, calculate_euclidean_disatance(node_coords[3], node_coords[4]))],
-    [(0, calculate_euclidean_disatance(node_coords[4], node_coords[0])), (3, calculate_euclidean_disatance(node_coords[4], node_coords[3]))]
+    [(1, calculate_euclidean_distance(node_coords[0], node_coords[1])), (2, calculate_euclidean_distance(node_coords[0], node_coords[2])), (4, calculate_euclidean_distance(node_coords[0], node_coords[4]))],
+    [(0, calculate_euclidean_distance(node_coords[1], node_coords[0])), (2, calculate_euclidean_distance(node_coords[1], node_coords[2]))],
+    [(0, calculate_euclidean_distance(node_coords[2], node_coords[0])), (1, calculate_euclidean_distance(node_coords[2], node_coords[1])), (3, calculate_euclidean_distance(node_coords[2], node_coords[3]))],
+    [(2, calculate_euclidean_distance(node_coords[3], node_coords[2])), (4, calculate_euclidean_distance(node_coords[3], node_coords[4]))],
+    [(0, calculate_euclidean_distance(node_coords[4], node_coords[0])), (3, calculate_euclidean_distance(node_coords[4], node_coords[3]))]
 ]
 
-# calculate_euclidean_disatance(node_coords[0], node_coords[1])
+# calculate_euclidean_distance(node_coords[0], node_coords[1])
 
 # Print adjacency lists
 for i in range(len(sample_graph)):
