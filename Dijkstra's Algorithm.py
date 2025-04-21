@@ -1,71 +1,70 @@
-import math
 from queue import PriorityQueue
+import random
+import numpy as np
+from input_generator import generate_graph, print_graph_info
 
-def dijkstra(start, goal, graph, edge_weights):
-    """Dijkstra's algorithm for finding the shortest path."""
-    priorityQueue = PriorityQueue()
-    priorityQueue.put((0, start))  # Priority queue with (cost, node)
-    came_from = {}  # Track the path
-    graph_score = {node: float('inf') for node in graph}  # Start with infinite cost
-    graph_score[start] = 0
+def dijkstra(start, goal, adj_list):
+    """Dijkstra's algorithm for finding the shortest path using numeric node IDs."""
+    num_nodes = len(adj_list)
+    priority_queue = PriorityQueue()
+    priority_queue.put((0, start))
+    
+    came_from = {}  # For path reconstruction
+    cost_so_far = {node: float('inf') for node in range(num_nodes)}
+    cost_so_far[start] = 0
 
-    while not priorityQueue.empty():
-        current_cost, current = priorityQueue.get()
+    while not priority_queue.empty():
+        current_cost, current = priority_queue.get()
 
-        # if we reached the end
+        # Reconstruct path
         if current == goal:
             path = []
             while current in came_from:
                 path.append(current)
                 current = came_from[current]
             path.append(start)
-            return path[::-1]
+            return cost_so_far[goal], path[::-1]
 
-        for neighbor in graph[current]:
-            # Calculate the cost to reach the neighbor
-            temp_score = graph_score[current] + edge_weights[(current, neighbor)]
-
-            if temp_score < graph_score[neighbor]:
+        for neighbor, weight in adj_list[current]:
+            new_cost = cost_so_far[current] + weight
+            
+            if new_cost < cost_so_far[neighbor]:
+                cost_so_far[neighbor] = new_cost
                 came_from[neighbor] = current
-                graph_score[neighbor] = temp_score
-                priorityQueue.put((temp_score, neighbor))
+                priority_queue.put((new_cost, neighbor))
 
-    return None
+    return float('inf'), []
 
-# Example input graph
-graph = {
-    'A': ['B', 'D', 'E'],
-    'B': ['A', 'D'],
-    'C': ['D', 'E'],
-    'D': ['A', 'B', 'C'],
-    'E': ['A', 'C']
-}
+if __name__ == "__main__":
+    seed_value = 67
+    random.seed(seed_value)
+    np.random.seed(seed_value)
 
-positions = {
-    'A': (0, 4),
-    'B': (3, 2),
-    'C': (3, 0),
-    'D': (1, 1),
-    'E': (-2, 1)
-}
+    # Generate the small unit graph as in input_generator's test
+    # adj_list, node_coords = generate_graph(
+    #     num_nodes=5,
+    #     edge_probability=0.7,
+    #     weight_type='unit',
+    #     visualize=True  # Set to True to visualize the graph
+    # )
 
-edge_weights = {
-    ('A', 'B'): 3.61,
-    ('A', 'D'): 3.16,
-    ('A', 'E'): 3.61,
-    ('B', 'D'): 2.24,
-    ('C', 'D'): 2.24,
-    ('C', 'E'): 5.10,
-    ('B', 'A'): 3.61,
-    ('D', 'A'): 3.16,
-    ('E', 'A'): 3.61,
-    ('D', 'B'): 2.24,
-    ('D', 'C'): 2.24,
-    ('E', 'C'): 5.10,
-}
+    # Generate the small unit graph as in input_generator's test
+    adj_list, node_coords = generate_graph(
+        num_nodes=50,
+        edge_probability=0.3, 
+        weight_type='random',
+        weight_range=(1, 50),
+        node_coords=None,
+        visualize=True
+        # save_path="large_random_graph.png"
+    )
 
-start = 'A'
-goal = 'C'
-path = dijkstra(start, goal, graph, edge_weights)
+    print_graph_info(adj_list, node_coords)
 
-print(f"Path from {start} to {goal}: {path}")
+    test_start = 1
+    test_goal = 4
+    cost, path = dijkstra(test_start, test_goal, adj_list)
+    
+    print(f"\nDijkstra Result from node {test_start} to {test_goal}:")
+    print(f"Total Cost: {cost}")
+    print(f"Path: {path}")
