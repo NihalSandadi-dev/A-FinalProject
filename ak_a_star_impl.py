@@ -1,8 +1,10 @@
 from collections import deque
 import heapq
+import random
+import numpy as np
 from helper_functions import calculate_euclidean_distance
 from helper_functions import PriorityNode
-from sample_input import node_coords, sample_graph
+from input_generator import generate_graph, print_graph_info
 
 def a_star(graph, node_coordinates, start, end):
     # if start is the end
@@ -63,21 +65,41 @@ def a_star(graph, node_coordinates, start, end):
     # No path found
     return float('inf'), []
 
-test_start = 1
-test_end = 4
-# res_paths = a_star(node_coords, sample_graph, test_start, test_end)
-res_paths = a_star(sample_graph, node_coords, test_start, test_end)
-print(res_paths)
+if __name__ == "__main__":
+# Set the same seed as input_generator's test case for reproducibility
+    seed_value = 67
+    random.seed(seed_value)
+    np.random.seed(seed_value)
 
+    # Generate the small unit graph as in input_generator's test
+    # adj_list, node_coords = generate_graph(
+    #     num_nodes=5,
+    #     edge_probability=0.7,
+    #     weight_type='unit',
+    #     visualize=True  # Set to True to visualize the graph
+    # )
 
-# PrioityNode Class Test
-# h = []
-# heapq.heappush(h, PriorityNode("A", 5))
-# heapq.heappush(h, PriorityNode("B", 3))
-# heapq.heappush(h, PriorityNode("C", 7))
-# heapq.heappush(h, PriorityNode("D", 11))
-# heapq.heappush(h, PriorityNode("E", 2))
+    # Generate the small unit graph as in input_generator's test
+    adj_list, node_coords = generate_graph(
+        num_nodes=50,
+        edge_probability=0.3, 
+        weight_type='random',
+        weight_range=(1, 50),
+        node_coords=None,
+        visualize=True
+        # save_path="large_random_graph.png"
+    )
 
-# while h:
-#     node = heapq.heappop(h)
-#     print("Popped node key: " + node.key + " and value: " + str(node.priority))
+        
+
+    # Print graph information for verification
+    print_graph_info(adj_list, node_coords)
+
+    # Test A* algorithm
+    test_start = 1
+    test_end = 4
+    cost, path = a_star(adj_list, node_coords, test_start, test_end)
+    
+    print(f"\nA* Result from node {test_start} to {test_end}:")
+    print(f"Cost: {cost}")
+    print(f"Path: {path}")
